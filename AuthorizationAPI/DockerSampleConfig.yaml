@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authorization-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authorization
+  template:
+    metadata:
+      labels:
+        app: authorization
+    spec:
+      containers:
+      - name: authorizationrepo
+        image:  pensionmanagementcr.azurecr.io/authorizationrepo:latest
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+      - name: processpensionsn
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authorization
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: authorization
